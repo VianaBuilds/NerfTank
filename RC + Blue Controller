@@ -1,0 +1,37 @@
+#include <IBusBM.h>
+#include <Wire.h>
+#include <AFMotor.h>
+
+
+
+int saveval=0;
+int vel=0;
+
+AF_DCMotor motor1(3); 
+AF_DCMotor motor2(4); 
+AF_DCMotor motor3(2); 
+
+IBusBM IBus; // IBus object receiver pin0
+
+char command; 
+
+void setup() 
+{       
+   IBus.begin(Serial);
+}
+
+
+void loop(){
+  int val;
+  val = IBus.readChannel(2); // get latest value for servo channel 1
+
+  if (saveval != val) {
+      saveval = val;
+       vel = map(val,1000 ,2000 ,0,255);
+      motor2.setSpeed(vel); //Define maximum velocity
+      motor2.run(FORWARD);
+    
+  }
+  
+  delay(100);
+}
